@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Mesh Publish/Subscribe Example</title>
+
+<script src="js/jquery.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/bootstrap.min.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
+<script type="text/javascript" src="client_sdk/dist/index.js"></script>
+<script type="text/javascript" src="client_sdk/client/dist/index.js"></script>
+<script type="text/javascript" src="main.js"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
+    <div class="container-fluid">
+        <a href="#" class="navbar-brand mr-3">Publish Subscribe Example</a>
+    </div>    
+</nav>
+<div class="container">
+    <div class="jumbotron">
+        <h1>Publish/Subscribe example</h1>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <h2>Local Video</h2>
+            <p>Result of getUserMedia</p>
+            <video id="video-local" width="80%" playsinline autoplay muted controls></video>
+        </div>
+        <div class="col-lg-4">
+            <h2>controls</h2>
+            <b>Select resoluton</b><br>
+            <button class="btn btn-info" id="btn_change_res_1920">1920x1080</button>
+            <button class="btn btn-info" id="btn_change_res_1280">1280x720</button>
+            <button class="btn btn-info" id="btn_change_res_320">320x240</button>
+            <br><b>Pub/Sub function </b><br>
+            <button class="btn btn-primary" id="btn_publish">publish</button>
+            <button class="btn btn-primary" id="btn_subscribe">subscribe</button>
+            <br>
+        </div>
+        <div class="col-lg-4">
+            <h2>Remote Video</h2>
+            <p>Result of subscribe()</p>
+            <video id="video-remote" width="80%" playsinline autoplay muted controls></video>
+        </div>
+        
+    </div>
+    <hr>
+    <footer>
+    </footer>
+</div>
+</body>
+
+
+</html>
+
