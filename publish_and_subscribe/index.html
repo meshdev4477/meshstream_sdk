@@ -11,7 +11,6 @@
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js"></script>
-<script type="text/javascript" src="client_sdk/dist/index.js"></script>
 <script type="text/javascript" src="client_sdk/client/dist/index.js"></script>
 <script type="text/javascript" src="main.js"></script>
 
@@ -31,22 +30,37 @@
             <h2>Local Video</h2>
             <p>Result of getUserMedia</p>
             <video id="video-local" width="80%" playsinline autoplay muted controls></video>
+            <pre id="getstats-publish"></pre>
+            <pre id="getstats-publish-audio"></pre>
         </div>
         <div class="col-lg-4">
             <h2>controls</h2>
             <b>Select resoluton</b><br>
+            <button class="btn btn-info" id="btn_change_res_3840">3840x2160</button>
             <button class="btn btn-info" id="btn_change_res_1920">1920x1080</button>
             <button class="btn btn-info" id="btn_change_res_1280">1280x720</button>
             <button class="btn btn-info" id="btn_change_res_320">320x240</button>
-            <br><b>Pub/Sub function </b><br>
+            <button class="btn btn-info" id="btn_change_res_80">80x60</button>
+            <br><br><b>Pub/Sub function </b><br>
+            <div>
+                published stream id: <u><span id="publishStreamId"></span></u>
+            </div>
             <button class="btn btn-primary" id="btn_publish">publish</button>
+            <br>
+            <label for="subscribeStreamId">subscribe stream id: </label>
+            <input type="text" id="subscribeStreamId">
             <button class="btn btn-primary" id="btn_subscribe">subscribe</button>
             <br>
+            <button class="btn btn-primary" id="btn_unsubscribe">unsubscribe</button>
+            <br>
         </div>
+ 
         <div class="col-lg-4">
             <h2>Remote Video</h2>
             <p>Result of subscribe()</p>
             <video id="video-remote" width="80%" playsinline autoplay muted controls></video>
+            <pre id="getstats-subscribe"></pre>
+            <pre id="getstats-subscribe-audio"></pre>
         </div>
         
     </div>

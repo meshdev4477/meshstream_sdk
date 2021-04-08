@@ -3,13 +3,13 @@ const {
     Utils,
 } = meshstreamClient;
 
-//Arguments for ConferenceApi 
-const AUTH_URL = 'https://q74eu8nozk.execute-api.us-east-1.amazonaws.com/v1/auth?token=PLACEHOLDER';
 const kinds = ['audio', 'video'];
-const worker = 0;
 
+let mediaStream = null;
 let stream_w = 0;
 let stream_h = 0;
+let capture = null; // for publish
+let playback = null; // for subscribe
 
 function attachMediaStreamToVideoElement(conferenceApi, mediaStream, videoElement) {
     const play = () => {
@@ -27,79 +27,137 @@ function attachMediaStreamToVideoElement(conferenceApi, mediaStream, videoElemen
     };
     videoElement.srcObject = mediaStream;
 
-    if (Utils.isSafari) {
+    if (meshstreamClient.Utils.isSafari) {
         const onStreamChange = () => {
             videoElement.srcObject = new MediaStream(mediaStream.getTracks());
             play();
         };
         if (conferenceApi != null) {
             conferenceApi
-                .on('addtrack', onStreamChange)
-                .on('removetrack', onStreamChange);
+                .on('addtrack', (track) => {
+                    console.log("Track added");
+                    console.log(track);
+                    onStreamChange()
+                })
+                .on('removetrack', (track) => {
+                    console.log("Track removed");
+                    console.log(track);
+                    onStreamChange()
+                })
         }
 
-    } else if (Utils.isFirefox) {
+    } else if (meshstreamClient.Utils.isFirefox) {
         videoElement.addEventListener('pause', play)
     }
     play();
 
 }
 
-async function change_res(w, h) {
+async function init_video(w, h) {
     try {
         console.log(`change res:${w}x${h}`)
         let video_local = document.getElementById("video-local");
-        navigator.mediaDevices.getUserMedia({
+        mediaStream = await Utils.getUserMedia({
             video: {
                 width: { exact: w },
                 height: { exact: h },
                 facingMode: 'environment'
             },
             audio: true
-        }).then(stream => {
-            mediaStream = stream
-            attachMediaStreamToVideoElement(null, mediaStream, video_local);
-            stream_w = w;
-            stream_h = h;
-        }).catch(err => {
-            alert(err);
         });
+        attachMediaStreamToVideoElement(null, mediaStream, video_local);
+        stream_w = w;
+        stream_h = h;
     }
     catch (err) {
-        alert(`change_res error:${err}`);
+        alert(`init_video error:${err}`);
     }
+
+}
+
+async function changeExistingLocalVideoSolution(w, h){
+    try {
+        let videoLocal = document.getElementById("video-local");
+        const videoTrack = videoLocal.srcObject.getVideoTracks()[0];
+        await videoTrack.applyConstraints({
+            width  : { exact: w },
+            height : { exact: h }
+        });
+        const stream = new MediaStream();
+        stream.addTrack(videoTrack);
+        videoLocal.srcObject = stream;
+        
+    } catch (err) {
+        alert(`changeExistingLocalVideoSolution error:${err}`);
+    }
+}
+
+async function getSdkConfig(operation, stream){
+    const result =  await fetch('[API_URL]', {
+        method: "POST",
+        body: JSON.stringify({ operation, stream }),
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer [authorization token]'
+        })
+    });
+
+    return result.json();
 }
 
 $(document).ready(async function () {
 
+    await init_video(1280, 720);
+
+    $('#btn_change_res_3840').click(async function () {
+        await changeExistingLocalVideoSolution(3840, 2160);
+    });
+
     $('#btn_change_res_1920').click(async function () {
-        await change_res(1920, 1080);
+        await changeExistingLocalVideoSolution(1920, 1080);
     });
 
     $('#btn_change_res_1280').click(async function () {
-        await change_res(1280, 720);
+        await changeExistingLocalVideoSolution(1280, 720);
     });
 
     $('#btn_change_res_320').click(async function () {
-        await change_res(320, 240);
+        await changeExistingLocalVideoSolution(320, 240);
+    });
+
+    $('#btn_change_res_80').click(async function () {
+        await changeExistingLocalVideoSolution(80, 60);
     });
 
 
     $('#btn_publish').click(async function () {
         console.log(`will publish`)
-        let api_response = await fetch(AUTH_URL, {});
-        let api_result = await api_response.json();
-        const capture = new ConferenceApi({
-            kinds: kinds,
-            url: api_result.url,
-            worker: worker,
-            stream: api_result.streamName,
-            token: api_result.apiToken
+
+        $('#publishStreamId').text(Math.random().toString(36).substring(5));
+        const sdkConfig = await getSdkConfig(1, $('#publishStreamId').text());
+        console.log(sdkConfig);
+
+        capture = new ConferenceApi({
+            kinds,
+            url: sdkConfig.config.url,
+            worker: sdkConfig.config.worker,
+            stream: sdkConfig.config.stream,
+            token: sdkConfig.config.token
         });
 
         try {
             await capture.publish(mediaStream);
-            alert(`publish ${stream_w}x${stream_h} to ${api_result.url} success`)
+            alert(`publish ${stream_w}x${stream_h} to ${sdkConfig.config.url} success`)
+            capture.on('getstats', (result) => {
+                // console.log(result);
+                if(result.kind == 'video'){
+                    $("#getstats-publish").text(JSON.stringify(result, null, 4));
+                }
+
+                if(result.kind == 'audio'){
+                    $("#getstats-publish-audio").text(JSON.stringify(result, null, 4));
+                }
+            })
         } catch (err) {
             console.log(err);
             alert(`Publish error:${err}`);
@@ -108,23 +166,44 @@ $(document).ready(async function () {
 
     $('#btn_subscribe').click(async function () {
         console.log('will subscribe')
-        let api_response = await fetch(AUTH_URL, {});
-        let api_result = await api_response.json();
-        const playback = new ConferenceApi({
-            kinds: kinds,
-            url: api_result.url,
-            worker: worker,
-            stream: api_result.streamName,
-            token: api_result.apiToken
+        
+        const subscribeStreamId = $('#subscribeStreamId').val();
+        const sdkConfig = await getSdkConfig(0, subscribeStreamId);
+        console.log(sdkConfig);
+
+        playback = new ConferenceApi({
+            kinds,
+            origin: sdkConfig.config.origin,
+            url: sdkConfig.config.url,
+            worker: sdkConfig.config.worker,
+            stream: sdkConfig.config.stream,
+            token: sdkConfig.config.token
         });
         const v = document.getElementById("video-remote");
 
         try {
             const mediaStream = await playback.subscribe();
             attachMediaStreamToVideoElement(playback, mediaStream, v);
+            playback.on('getstats', (result) => {
+                if(result.kind == 'video'){
+                    $("#getstats-subscribe").text(JSON.stringify(result, null, 4));
+                }
+
+                if(result.kind == 'audio'){
+                    $("#getstats-subscribe-audio").text(JSON.stringify(result, null, 4));
+                }
+            })
         } catch (err) {
+            console.log(err);
             alert(`Subscribe error:${err}`);
         }
     });
-    await change_res(1280, 720);
+
+    $('#btn_unsubscribe').click(async function() {
+        console.log("Will unsubscribe");
+        await playback.unsubscribeTrack('video');
+        await playback.unsubscribeTrack('audio');
+        const v = document.getElementById("video-remote");
+        v.srcObject = null;
+    });
 });
