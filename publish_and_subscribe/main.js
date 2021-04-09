@@ -201,8 +201,7 @@ $(document).ready(async function () {
 
     $('#btn_unsubscribe').click(async function() {
         console.log("Will unsubscribe");
-        await playback.unsubscribeTrack('video');
-        await playback.unsubscribeTrack('audio');
+        await playback.close()
         const v = document.getElementById("video-remote");
         v.srcObject = null;
     });

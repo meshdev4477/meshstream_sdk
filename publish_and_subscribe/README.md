@@ -150,9 +150,8 @@ conferenceApi
   });
 ```
 
-6. unsubscribe （ 記得 video 和 audio 都需要 unsubscribe ）
+6. unsubscribe (for subscribe 的 conferenceApi 物件)
 
 ```javascript
-await conferenceApi.unsubscribe('video');
-await conferenceApi.unsubscribe('audio');
+await conferenceApi.close()
 ```
