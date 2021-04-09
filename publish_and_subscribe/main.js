@@ -8,8 +8,8 @@ const kinds = ['audio', 'video'];
 let mediaStream = null;
 let stream_w = 0;
 let stream_h = 0;
-let capture = null; // for publish
-let playback = null; // for subscribe
+let capture = null; // conferenceApi object for publish
+let playback = null; // conferenceApi object for subscribe
 
 function attachMediaStreamToVideoElement(conferenceApi, mediaStream, videoElement) {
     const play = () => {
