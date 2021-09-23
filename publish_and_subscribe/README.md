@@ -45,15 +45,14 @@ async function getSdkConfig(operation, stream){
 
 ## sdk 使用方式
 
-1. 將 stream, operation 帶入 `getSdkConfig(stream, operation)` 並執行該 function，取得其回傳的 sdkConfig
+1. 將 stream, operation 帶入 `getSdkConfig(operation, stream)` 並執行該 function，取得其回傳的 sdkConfig
 
 參數格式:
 
 | 參數 | 型別 | 必填 | 說明 |
-|  ----  | ----  | ---- | ---- | 
-| stream | string | required | stream 的名稱 |
+|  ----  | ----  | ---- | ---- |
 | operation | boolean | required | publish 為 true，subscribe 為 false |
-
+| stream | string | required | stream 的名稱 |
 
 ==> 回傳值: 
 
