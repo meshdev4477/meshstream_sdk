@@ -56,7 +56,11 @@
   * Apidoc 詳細說明
 
     Apidoc :使用時需要先下載(./apidoc/)，再透過瀏覽器開啟./apidoc/index.html
+
+  * [Apidoc](./apidoc/index.html )
+
   * 測試時可使用Meshstream會員系統
+    Ｍeshstream 目前有現成的會員系統供串接，可先試用。
 
 * 紀錄(今年二月release)
   * 使用者紀錄
@@ -113,4 +117,3 @@
     * 從活動網頁開啟會議室
     * 身份驗證
     * 取得使用紀錄
-* [Apidoc](./apidoc/index.html )
