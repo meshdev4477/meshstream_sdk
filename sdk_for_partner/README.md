@@ -65,7 +65,7 @@
 
 * SDK Sample
   * [快速上手版本](./api_sample)
-  請參照主流程
+  請參照主流
   ```
   async function Exec (){
 
@@ -101,8 +101,9 @@
   // Step 5 : Launch Ｒoom with Secondary Browser，實際流程為客戶端啟動，在這邊實作是為了整體流程展現。
   //var roomUrl = "https://conference.meshstream.io/"+roomId;
   //open(roomUrl, {app: {name: 'safari'}});
+  
+  } 
 
-} 
   ```
   * 步驟：
     * 取得帳號
