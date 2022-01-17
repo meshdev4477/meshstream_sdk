@@ -45,7 +45,7 @@
   * 頻寬使用
 
 * SDK Sample
-  * [快速上手版本](https://gitlab.com/instaapp.dev/sdk_sample/api_sample/-/blob/develop/index.js)
+  * [快速上手版本](./api_sample))
   * 步驟：
     * 取得帳號
     * 從Dashboard或API建立專案
