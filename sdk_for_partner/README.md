@@ -9,6 +9,7 @@
 5. 紀錄
 6. SDK Sample
 7. Apidoc
+8. Known issue
 
 * Dashboard申請帳號
   * email
@@ -123,5 +124,5 @@
     
     Apidoc :使用時需要先下載(./apidoc/)，再透過瀏覽器開啟./apidoc/index.html
 
-* known issue
+* Known issue
   * 目前透過 Dashboard 會無法建立專案管理中的會議室，僅能夠過Call Ａpi 建立 
