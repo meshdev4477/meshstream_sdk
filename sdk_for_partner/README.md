@@ -55,7 +55,6 @@
   ![參數](./apidoc/user_login_meeting_room.svg)
   * Apidoc 詳細說明
 
-    Apidoc :使用時需要先下載(./apidoc/)，再透過瀏覽器開啟./apidoc/index.html
 
   * [Apidoc](./apidoc/index.html )
 
@@ -117,3 +116,12 @@
     * 從活動網頁開啟會議室
     * 身份驗證
     * 取得使用紀錄
+
+
+
+* [Apidoc](./apidoc/index.html )
+    
+    Apidoc :使用時需要先下載(./apidoc/)，再透過瀏覽器開啟./apidoc/index.html
+
+* known issue
+  * 目前透過 Dashboard 會無法建立專案管理中的會議室，僅能夠過Call Ａpi 建立 
