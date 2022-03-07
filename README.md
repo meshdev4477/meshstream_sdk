@@ -20,7 +20,7 @@ streaming sdk interface
 
 - import sdk 
 ```javascript=
-import { StreamingSdk } from '...'
+import { StreamingSdk } from 'meshstreamSdk'
 ```
 
 <!-- - init device (mediasoup)
@@ -30,31 +30,30 @@ meshDevice.initDevice();
 ```
  -->
 - init streaming sdk
-> `options` 可用來指定 codec、serverUrl、連線方式
 
 ```javascript=
-const streamingSdk = new StreamingSdk({options})
+const streamingSdk = new StreamingSdk({ peerId, serverUrl })
 ```
 
 - publish
 ```javascript=
 // type: RTC | RTSP | RTMP，如果是 RTSP & RTMP，需給 url
-const { streamId } = await streamingSdk.publish({type, option, streamName}});
+const { success, error } = await streamingSdk.publish({ streamName, mediaStream });
 ```
 
 - unpublish 直播
 ```javascript=
-const { success } = await streamingSdk.unpublish({ streamName })
+const { success, error } = await streamingSdk.unpublish({ streamName })
 ```
 
 - subscribe 直播
 ```javascript=
-const { stream } = await streamingSdk.subscribe({ streamName })
+const { success, error, mediaStream } = await streamingSdk.subscribe({ streamName })
 ```
 
 - unsubscribe 直播
 ```javascript=
-const { success } = await streamingSdk.unsubscribe({ streamName })
+const { success, error } = await streamingSdk.unsubscribe({ streamName })
 ```
 
 ---
