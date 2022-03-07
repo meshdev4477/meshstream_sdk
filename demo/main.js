@@ -30,13 +30,12 @@ function main(){
       audio: true 
     });
 
-    const result = await streamingSdk.publish({ streamName, mediaStream });
-    console.log(result);
-    // if(!success){
-    //   alert("Publish error:", error);
-    //   return;
-    // }
-    // alert("Publish successfully!");
+    const { success, error } = await streamingSdk.publish({ streamName, mediaStream });
+    if(!success){
+      alert("Publish error:", error);
+      return;
+    }
+    alert("Publish successfully!");
     $('#video-local').srcObject = mediaStream;
   })
   
