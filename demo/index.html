@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>meshstream sdk demo</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <h1>meshstream sdk demo</h1>
+  <div id="form">
+    <label for="publish-streamName">
+      publish streamName: 
+      <input type="text" name="input-publish-streamName" id="input-publish-streamName">
+    </label>
+    <button id="btn-publish">publish</button>
+    <label for="subscribe-streamName">
+      subscribe streamName: 
+      <input type="text" name="input-subscribe-streamName" id="input-subscribe-streamName">
+    </label>
+    <button id="btn-subscribe">subscribe</button>
+  </div>
+
+  <div>
+    <div id="local-video-container">
+      <video id="video-local" width="50%" autoplay controls muted playsinline></video>
+      <div class="overlayText">
+        <p id="local-streamName"></p>
+      </div>
+    </div>
+  </div>
+  <div id="remote-videos">
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js" integrity="sha512-AcZyhRP/tbAEsXCCGlziPun5iFvcSUpEz2jKkx0blkYKbxU81F+iq8FURwPn1sYFeksJ+sDDrI5XujsqSobWdQ==" crossorigin="anonymous"></script>
+  <script src="./dist/index.sdk.js"></script>
+  <script src="./main.js"></script>
+</body>
+</html>
