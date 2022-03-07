@@ -20,7 +20,9 @@ streaming sdk interface
 
 - import sdk 
 ```javascript=
-import { StreamingSdk } from 'meshstreamSdk'
+const {
+  StreamingSdk
+} = meshstreamSdk
 ```
 
 <!-- - init device (mediasoup)
@@ -62,7 +64,7 @@ const { success, error } = await streamingSdk.unsubscribe({ streamName })
 # interface - socket
 ```javascript==
 // 當有新的 producer 產生時，後端會 broadcast event 給所有人
-streamingSdk.on('publishingStream',({ streamId }) => {
+streamingSdk.on('publishingStream',({ streamName }) => {
 
 })
 ```
@@ -70,7 +72,7 @@ streamingSdk.on('publishingStream',({ streamId }) => {
 - streamEnded
 ```javascript==
 // 當 producer 關閉或者 produce 的人斷線，後端會 broadcast event 給所有人
-streamingSdk.on('streamEnded',({streamId}) => {
+streamingSdk.on('streamEnded',({ streamName }) => {
 
 })
 ```
