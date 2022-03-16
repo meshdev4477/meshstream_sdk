@@ -9,16 +9,43 @@
 <body>
   <h1>meshstream sdk demo</h1>
   <div id="form">
+    <label for="title">
+      title: 
+      <input type="text" name="input-title" id="input-title">
+    </label>
+    <label for="description">
+      description: 
+      <input type="text" name="input-description" id="input-description">
+    </label>
+    <button id="btn-createEvent">create event</button>
+
+    <br>
+    <br>
+
+    <label for="eventId">
+      eventId: 
+      <input type="text" name="input-eventId" id="input-eventId">
+    </label>
+    <button id="btn-joinEvent">join event</button>
+    
+    <br>
+    <br>
+
     <label for="publish-streamName">
       publish streamName: 
       <input type="text" name="input-publish-streamName" id="input-publish-streamName">
     </label>
-    <button id="btn-publish">publish</button>
+    <button id="btn-checkStatusByStreamName" disabled>checkStatusByStreamName</button>
+    <button id="btn-publish" disabled>publish</button>
+
+    <br>
+    <br>
+
     <label for="subscribe-streamName">
       subscribe streamName: 
       <input type="text" name="input-subscribe-streamName" id="input-subscribe-streamName">
     </label>
-    <button id="btn-subscribe">subscribe</button>
+    <button id="btn-subscribe" disabled>subscribe</button>
   </div>
 
   <div>
@@ -33,6 +60,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js" integrity="sha512-AcZyhRP/tbAEsXCCGlziPun5iFvcSUpEz2jKkx0blkYKbxU81F+iq8FURwPn1sYFeksJ+sDDrI5XujsqSobWdQ==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.26.0/axios.min.js" integrity="sha512-bPh3uwgU5qEMipS/VOmRqynnMXGGSRv+72H/N260MQeXZIK4PG48401Bsby9Nq5P5fz7hy5UGNmC/W1Z51h2GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="./dist/index.sdk.js"></script>
   <script src="./main.js"></script>
 </body>
