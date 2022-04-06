@@ -1,6 +1,14 @@
 streaming sdk interface
 ===
 
+### 2022-03-17 updates
+- methods
+	-	startRecording
+	- finishRecording
+- eventListeners
+	-	startRecording
+	- finishRecording
+
 # User story
 ## 直播主
 - [ ] 發起直播
@@ -65,8 +73,9 @@ const { isPublished } = await streamingSdk.checkStatusByStreamName({ streamName 
 
 - publish
 ```javascript
-// type: RTC | RTSP | RTMP，如果是 RTSP & RTMP，需給 url
-const { success, error } = await streamingSdk.publish({ streamName, mediaStream });
+// type: rtc | file | rtmp | rtsp
+// 若 type 為 rtc 以外的，必須填入 options.url
+const { success, error } = await streamingSdk.publish({ type, options, streamName, mediaStream });
 ```
 
 - unpublish 直播
@@ -84,6 +93,16 @@ const { success, error, mediaStream } = await streamingSdk.subscribe({ streamNam
 const { success, error } = await streamingSdk.unsubscribe({ streamName })
 ```
 
+- record stream
+```javascript
+const { success, error } = await streamingSdk.startRecording({ streamName })
+```
+
+- finish recording stream
+```javascript
+const { success, error, downloadLink } = await streamingSdk.finishRecording({ streamName, isDownload = true })
+// isDownload 為 boolean，表示是否要產生錄影檔（預設為 true，若 false 則等同於放棄錄影）
+```
 ---
 
 
@@ -109,7 +128,7 @@ streamingSdk.on('joinEvent:error',({ error }) => {
 
 ```javascript
 // when joining an event successfully
-streamingSdk.on('joinInfo',({ joinInfo }) => {
+streamingSdk.on('joinInfo',(joinInfo) => {
 	/*
 		the example value of the joinInfo variable :
 			{
@@ -129,6 +148,22 @@ streamingSdk.on('joinInfo',({ joinInfo }) => {
 ```javascript
 // 當 producer 關閉或者 produce 的人斷線，後端會 broadcast event 給所有人
 streamingSdk.on('streamEnded',({ streamName }) => {
+
+})
+```
+
+- startRecording
+```javascript
+// 當某個 stream 被 record 時，後端會 broadcast event 給所有人
+streamingSdk.on('startRecording',() => {
+
+})
+```
+- finishRecording
+
+```javascript
+// 當某個 stream 的 recording 結束時，後端會 broadcast event 給所有人
+streamingSdk.on('finishRecording',() => {
 
 })
 ```
