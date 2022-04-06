@@ -23,7 +23,10 @@ function main(){
       $('#btn-joinEvent').disabled = true;
       $('#btn-checkStatusByStreamName').disabled = false;
       $('#btn-publish').disabled = false;
+      $('#btn-fileStreaming').disabled = false;
       $('#btn-subscribe').disabled = false;
+      $('#btn-recording').disabled = false;
+      $('#btn-finishRecording').disabled = false;
     })
     .on('publishingStream', async ({ streamName }) => {
       console.log("A stream is published", streamName);
@@ -42,7 +45,7 @@ function main(){
     }
 
     const startedAt = new Date(); // You can also define a time later than the current one
-
+    startedAt.setSeconds(startedAt.getSeconds() + 5);
     const { success, message, eventId } = await streamingSdk.createEvent({ title, description, startedAt });
     if(!success) {
       alert(`create event error: ${message}`);
@@ -91,7 +94,8 @@ function main(){
       audio: true 
     });
 
-    const { success, error } = await streamingSdk.publish({ streamName, mediaStream });
+    const type = 'rtc';
+    const { success, error } = await streamingSdk.publish({ type, streamName, mediaStream });
     if(!success){
       alert(`Publish error: ${error}`);
       return;
@@ -100,6 +104,26 @@ function main(){
     $('#video-local').srcObject = mediaStream;
   })
   
+  $('#btn-fileStreaming').addEventListener('click', async () => {
+    const streamName = $('#input-publish-streamName').value.trim();
+    if(!streamName) {
+      alert("publish streamName shouldn't be empty");
+      return;
+    }
+    $('#input-publish-streamName').value = null;
+
+    const type = 'file';
+    const options = {
+      url: "https://meshstream-server-back.meshstream.io/fps-test.mp4"
+    };
+    const { success, error } = await streamingSdk.publish({ type, streamName, options });
+    if(!success){
+      alert(`file streaming error: ${error}`);
+      return;
+    }
+    alert("file streaming successfully!");
+  })
+
   $('#btn-subscribe').addEventListener('click', async () => {
     const streamName = $('#input-subscribe-streamName').value.trim();
     if(!streamName) {
@@ -117,6 +141,45 @@ function main(){
 
     console.log(mediaStream);
     addRemoteMedia(mediaStream, streamName);
+  })
+
+  $("#btn-recording").addEventListener('click', async () => {
+    const streamName = $('#input-recording-streamName').value.trim();
+    if(!streamName) {
+      alert("recording streamName shouldn't be empty");
+      return;
+    }
+
+    $('#input-recording-streamName').value = null;
+
+    const { success, error } = await streamingSdk.startRecording({ streamName });
+    if(!success) {
+      alert(`recording error: ${error}`);
+      return;
+    }
+
+    alert("recording successfully");
+  })
+
+
+  $("#btn-finishRecording").addEventListener('click', async () => {
+    const streamName = $('#input-recording-streamName').value.trim();
+    if(!streamName) {
+      alert("recording streamName shouldn't be empty");
+      return;
+    }
+
+    $('#input-recording-streamName').value = null;
+
+    const isDownload = true;
+    const { success, error, downloadLink } = await streamingSdk.finishRecording({ streamName, isDownload });
+    if(!success) {
+      alert(`finish recording error: ${error}`);
+      return;
+    }
+
+    alert("finish recording successfully");
+    if(downloadLink) $("#downloadLink").innerText = downloadLink;
   })
 }
 
