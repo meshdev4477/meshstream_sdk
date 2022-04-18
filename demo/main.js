@@ -27,6 +27,8 @@ function main(){
       $('#btn-subscribe').disabled = false;
       $('#btn-recording').disabled = false;
       $('#btn-finishRecording').disabled = false;
+      $('#btn-rtmp').disabled = false;
+      $('#btn-finishRtmp').disabled = false;
     })
     .on('publishingStream', async ({ streamName }) => {
       console.log("A stream is published", streamName);
@@ -180,6 +182,43 @@ function main(){
 
     alert("finish recording successfully");
     if(downloadLink) $("#downloadLink").innerText = downloadLink;
+  })
+
+  $("#btn-rtmp").addEventListener('click', async () => {
+    const streamName = $('#input-rtmp-streamName').value.trim();
+    if(!streamName) {
+      alert("rtmp streamName shouldn't be empty");
+      return;
+    }
+
+    $('#input-rtmp-streamName').value = null;
+
+    const rtmpUrl = 'rtmp://rtmp-tw-gcp.meshstream.io/live/ken2';
+    const { success, error } = await streamingSdk.startPushingToRtmp({ streamName, rtmpUrl });
+    if(!success) {
+      alert(`rtmp error: ${error}`);
+      return;
+    }
+
+    alert("push to rtmp successfully");
+  })
+
+  $("#btn-finishRtmp").addEventListener('click', async () => {
+    const streamName = $('#input-rtmp-streamName').value.trim();
+    if(!streamName) {
+      alert("rtmp streamName shouldn't be empty");
+      return;
+    }
+
+    $('#input-rtmp-streamName').value = null;
+
+    const { success, error } = await streamingSdk.finishPushingToRtmp({ streamName });
+    if(!success) {
+      alert(`finish rtmp error: ${error}`);
+      return;
+    }
+
+    alert("finish rtmp successfully");
   })
 }
 
